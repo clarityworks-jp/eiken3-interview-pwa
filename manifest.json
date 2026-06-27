@@ -1,0 +1,17 @@
+{
+  "name": "英検3級 二次試験 練習",
+  "short_name": "英検3級面接",
+  "description": "英検3級二次試験の模擬面接をブラウザ内で練習するPWAです。",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#eaf7ff",
+  "theme_color": "#78b7d8",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

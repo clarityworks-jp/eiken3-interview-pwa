@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#78b7d8">
+    <title>英検3級 二次試験 練習</title>
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">英検3級 二次試験</p>
+        <h1>模擬面接練習</h1>
+      </div>
+      <div class="header-actions">
+        <label class="file-button">
+          問題ファイルを読み込む
+          <input id="jsonFileInput" type="file" accept="application/json,.json">
+        </label>
+        <button id="clearImportedButton" type="button" class="secondary-button">読み込んだ問題を削除</button>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <section class="controls-panel" aria-label="問題セットと音声設定">
+        <label class="field-label" for="setSelect">問題セット</label>
+        <select id="setSelect"></select>
+
+        <fieldset class="rate-control">
+          <legend>読み上げ速度</legend>
+          <label>
+            <input type="radio" name="speechRate" value="0.75" checked>
+            ゆっくり
+          </label>
+          <label>
+            <input type="radio" name="speechRate" value="1">
+            普通
+          </label>
+        </fieldset>
+
+        <p id="statusMessage" class="status-message" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="steps-panel" aria-label="一人で練習する手順">
+        <h2>本番に近い練習の進め方</h2>
+        <p class="steps-note">新しく追加する問題セットは、英検3級二次試験に合わせて5問構成を基本にしてください。</p>
+        <ol>
+          <li>左の英文を声に出して音読する</li>
+          <li>「質問を聞く」を押す</li>
+          <li>自分で声に出して答える</li>
+          <li>分からないときだけ「質問文を表示」や「日本語ヒントを表示」を押す</li>
+          <li>答えたあとで「模範解答を表示」または「模範解答を聞く」を押す</li>
+          <li>「次の質問へ」で進む</li>
+        </ol>
+        <p>聞き取れないときは Pardon? と言う練習をしましょう。</p>
+      </section>
+
+      <section class="practice-layout">
+        <article class="exam-card" aria-label="面接カード">
+          <div class="card-title-row">
+            <h2 id="setTitle">A School Library</h2>
+            <span id="sourceBadge" class="source-badge">初期問題</span>
+          </div>
+          <h3 class="illustration-title">イラスト</h3>
+          <div id="illustration" class="illustration" aria-label="問題イラスト"></div>
+          <div id="picturePoints" class="picture-points" hidden>
+            <button id="togglePicturePointsButton" type="button" class="secondary-button" aria-expanded="false">イラストのポイントを表示</button>
+            <div id="picturePointsPanel" class="picture-points-panel" hidden>
+              <ul id="picturePointsList"></ul>
+            </div>
+          </div>
+          <div class="passage-card">
+            <h3>英文パッセージ：まず声に出して音読しましょう</h3>
+            <p class="guide-text">まず英文を声に出して読みましょう。読み終わったら、右の質問へ進みます。</p>
+            <p class="guide-text">発音を確認したいときは「本文を聞く」を押しましょう。</p>
+            <ol id="passageList"></ol>
+            <button id="speakPassageButton" type="button">本文を聞く</button>
+          </div>
+        </article>
+
+        <article class="question-card" aria-label="質問練習">
+          <div class="question-heading">
+            <p id="questionCounter">Question 1 / 6</p>
+            <span id="questionType" class="question-type">本文</span>
+          </div>
+          <div id="questionPrompt" class="question-prompt">
+            <p>質問を聞いて、声に出して答えましょう。</p>
+            <p>答えたあとで、必要なら質問文・ヒント・模範解答を確認してください。</p>
+          </div>
+
+          <div id="questionTextPanel" class="question-text-panel" hidden>
+            <h3>質問文</h3>
+            <p id="questionText"></p>
+          </div>
+
+          <div class="button-grid">
+            <button id="speakQuestionButton" type="button" class="primary-action">質問を聞く</button>
+            <button id="toggleQuestionButton" type="button" class="secondary-button" aria-expanded="false">質問文を表示</button>
+            <button id="toggleHintButton" type="button" class="secondary-button" aria-expanded="false">日本語ヒントを表示</button>
+            <button id="toggleAnswerButton" type="button" class="secondary-button" aria-expanded="false">模範解答を表示</button>
+            <button id="speakAnswerButton" type="button" class="secondary-button">模範解答を聞く</button>
+            <button id="stopSpeechButton" type="button" class="danger-button">停止</button>
+          </div>
+
+          <div id="hintPanel" class="hint-panel" hidden>
+            <h3>日本語ヒント</h3>
+            <p id="hintText"></p>
+          </div>
+
+          <div id="answerPanel" class="answer-panel" hidden>
+            <h3>模範解答</h3>
+            <p id="sampleAnswer"></p>
+          </div>
+
+          <div class="nav-row">
+            <button id="prevQuestionButton" type="button" class="secondary-button">前の質問へ</button>
+            <button id="nextQuestionButton" type="button">次の質問へ</button>
+          </div>
+        </article>
+      </section>
+
+      <section class="level-panel" aria-label="難易度チェック">
+        <h2>難易度チェック</h2>
+        <dl id="levelCheckList"></dl>
+      </section>
+    </main>
+
+    <script src="questions.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
